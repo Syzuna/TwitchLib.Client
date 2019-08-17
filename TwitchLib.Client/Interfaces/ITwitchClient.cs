@@ -245,6 +245,12 @@ namespace TwitchLib.Client.Interfaces
         /// </summary>
         event EventHandler<OnRitualNewChatterArgs> OnRitualNewChatter;
 
+        event EventHandler OnSelfRaidError;
+        event EventHandler OnNoPermissionError;
+        event EventHandler OnRaidedChannelIsMatureAudience;
+        event EventHandler<OnFailureToReceiveJoinConfirmationArgs> OnFailureToReceiveJoinConfirmation;
+        event EventHandler<OnUnaccountedForArgs> OnUnaccountedFor;
+
         /// <summary>
         /// Initializes the specified credentials.
         /// </summary>
