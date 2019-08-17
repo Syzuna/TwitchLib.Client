@@ -123,7 +123,7 @@ namespace TwitchLib.Client
         /// The current connection status of the client.
         /// </summary>
         /// <value><c>true</c> if this instance is connected; otherwise, <c>false</c>.</value>
-        public bool IsConnected => IsInitialized && _client != null ? _client.IsConnected : false;
+        public bool IsConnected => IsInitialized && _client != null && _client.IsConnected;
 
         /// <summary>
         /// The emotes this channel replaces.
