@@ -22,9 +22,9 @@ namespace TwitchLib.Client
 {
     /// <summary>
     /// Represents a client connected to a Twitch channel.
-    /// Implements the <see cref="TwitchLib.Client.Interfaces.ITwitchClient" />
+    /// Implements the <see cref="ITwitchClient" />
     /// </summary>
-    /// <seealso cref="TwitchLib.Client.Interfaces.ITwitchClient" />
+    /// <seealso cref="ITwitchClient" />
     public class TwitchClient : ITwitchClient
     {
         #region Private Variables
