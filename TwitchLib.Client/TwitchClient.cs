@@ -488,7 +488,7 @@ namespace TwitchLib.Client
         /// <param name="args">The arguments.</param>
         internal void RaiseEvent(string eventName, object args = null)
         {
-            FieldInfo fInfo = GetType().GetField(eventName, BindingFlags.Instance | BindingFlags.NonPublic) as FieldInfo;
+            FieldInfo fInfo = GetType().GetField(eventName, BindingFlags.Instance | BindingFlags.NonPublic);
             MulticastDelegate multi = fInfo?.GetValue(this) as MulticastDelegate;
 
             if (multi == null)
@@ -511,7 +511,7 @@ namespace TwitchLib.Client
 
             Log($"Writing: {message}");
             _client.Send(message);
-            OnSendReceiveData?.Invoke(this, new OnSendReceiveDataArgs { Direction = Enums.SendReceiveDirection.Sent, Data = message });
+            OnSendReceiveData?.Invoke(this, new OnSendReceiveDataArgs { Direction = SendReceiveDirection.Sent, Data = message });
         }
 
         #region SendMessage
@@ -621,7 +621,7 @@ namespace TwitchLib.Client
         public void Reconnect()
         {
             if (!IsInitialized) HandleNotInitialized();
-            Log($"Reconnecting to Twitch");
+            Log("Reconnecting to Twitch");
             _joinedChannelManager.Clear();
             _client.Reconnect();
         }
@@ -858,7 +858,7 @@ namespace TwitchLib.Client
                     continue;
 
                 Log($"Received: {line}");
-                OnSendReceiveData?.Invoke(this, new OnSendReceiveDataArgs { Direction = Enums.SendReceiveDirection.Received, Data = line });
+                OnSendReceiveData?.Invoke(this, new OnSendReceiveDataArgs { Direction = SendReceiveDirection.Received, Data = line });
                 HandleIrcMessage(_ircParser.ParseIrcMessage(line));
             }
         }
@@ -1076,7 +1076,6 @@ namespace TwitchLib.Client
                 {
                     ChatCommand chatCommand = new ChatCommand(chatMessage);
                     OnChatCommandReceived?.Invoke(this, new OnChatCommandReceivedArgs { Command = chatCommand });
-                    return;
                 }
             }
         }
@@ -1468,7 +1467,7 @@ namespace TwitchLib.Client
         /// <summary>
         /// Handles the not initialized.
         /// </summary>
-        /// <exception cref="TwitchLib.Client.Exceptions.ClientNotInitializedException">The twitch client has not been initialized and cannot be used. Please call Initialize();</exception>
+        /// <exception cref="ClientNotInitializedException">The twitch client has not been initialized and cannot be used. Please call Initialize();</exception>
         protected static void HandleNotInitialized()
         {
             throw new ClientNotInitializedException("The twitch client has not been initialized and cannot be used. Please call Initialize();");
@@ -1477,7 +1476,7 @@ namespace TwitchLib.Client
         /// <summary>
         /// Handles the not connected.
         /// </summary>
-        /// <exception cref="TwitchLib.Client.Exceptions.ClientNotConnectedException">In order to perform this action, the client must be connected to Twitch. To confirm connection, try performing this action in or after the OnConnected event has been fired.</exception>
+        /// <exception cref="ClientNotConnectedException">In order to perform this action, the client must be connected to Twitch. To confirm connection, try performing this action in or after the OnConnected event has been fired.</exception>
         protected static void HandleNotConnected()
         {
             throw new ClientNotConnectedException("In order to perform this action, the client must be connected to Twitch. To confirm connection, try performing this action in or after the OnConnected event has been fired.");
