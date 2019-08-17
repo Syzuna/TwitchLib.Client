@@ -98,7 +98,7 @@ namespace TwitchLib.Client
         /// Assembly version of TwitchLib.Client.
         /// </summary>
         /// <value>The version.</value>
-        public Version Version => Assembly.GetEntryAssembly().GetName().Version;
+        public Version Version => Assembly.GetEntryAssembly()?.GetName().Version;
         /// <summary>
         /// Checks if underlying client has been initialized.
         /// </summary>
@@ -489,10 +489,15 @@ namespace TwitchLib.Client
         internal void RaiseEvent(string eventName, object args = null)
         {
             FieldInfo fInfo = GetType().GetField(eventName, BindingFlags.Instance | BindingFlags.NonPublic) as FieldInfo;
-            MulticastDelegate multi = fInfo.GetValue(this) as MulticastDelegate;
+            MulticastDelegate multi = fInfo?.GetValue(this) as MulticastDelegate;
+
+            if (multi == null)
+                return;
+
             foreach (Delegate del in multi.GetInvocationList())
             {
-                del.Method.Invoke(del.Target, args == null ? new object[] { this, new EventArgs() } : new[] { this, args });
+                del.Method.Invoke(del.Target,
+                    args == null ? new object[] {this, new EventArgs()} : new[] {this, args});
             }
         }
 
